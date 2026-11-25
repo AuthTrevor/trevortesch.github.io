@@ -1,46 +1,1875 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function(){
+      try {
+        var saved = localStorage.getItem('theme');
+        var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        var theme = saved || (prefersLight ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+        var textSize = localStorage.getItem('textSize') || 'large';
+        if (!/^(compact|standard|large)$/.test(textSize)) textSize = 'standard';
+        document.documentElement.setAttribute('data-text-size', textSize);
+        var colorVision = localStorage.getItem('colorVision') || 'default';
+        if (!/^(default|red-green|blue-yellow|high-contrast)$/.test(colorVision)) colorVision = 'default';
+        document.documentElement.setAttribute('data-color-vision', colorVision);
+      } catch(e) {}
+    })();
+    function toggleTheme(){
+      var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      var next = cur === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch(e) {}
+      try { window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } })); } catch(e) {}
+    }
+    function setTextSize(size){
+      if (!/^(compact|standard|large)$/.test(size)) size = 'standard';
+      document.documentElement.setAttribute('data-text-size', size);
+      try { localStorage.setItem('textSize', size); } catch(e) {}
+      document.querySelectorAll('[data-text-size-option]').forEach(function(btn){
+        var active = btn.getAttribute('data-text-size-option') === size;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      try { window.dispatchEvent(new CustomEvent('textsizechange', { detail: { size: size } })); } catch(e) {}
+      setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 40);
+    }
+    function setColorVision(mode){
+      if (!/^(default|red-green|blue-yellow|high-contrast)$/.test(mode)) mode = 'default';
+      document.documentElement.setAttribute('data-color-vision', mode);
+      try { localStorage.setItem('colorVision', mode); } catch(e) {}
+      document.querySelectorAll('[data-color-vision-option]').forEach(function(btn){
+        var active = btn.getAttribute('data-color-vision-option') === mode;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-checked', active ? 'true' : 'false');
+      });
+      try { window.dispatchEvent(new CustomEvent('colorvisionchange', { detail: { mode: mode } })); } catch(e) {}
+      setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 40);
+    }
+  </script>
+  <meta name="google-site-verification" content="IoQlZGGRI5vZ-DJwCeh57bBPD-auDs8Xq2LcSMv3u3k" />
+  <title>CIA World Factbook Archive</title>
+  
+  <meta name="apple-itunes-app" content="app-id=6777613632, app-argument=factbook://tab/home">
+  <link rel="stylesheet" href="/static/css/native-app-links.css?v=2-compact">
+  
+  
+  
+  
+  
+  
+  <meta name="description" content="Explore CIA World Factbooks from 1990–2025: country profiles, maps, comparisons, and analysis.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CIA World Factbook Archive">
+  <meta property="og:title" content="CIA World Factbook Archive">
+  <meta property="og:description" content="Explore CIA World Factbooks from 1990–2025: country profiles, maps, comparisons, and analysis.">
+  <meta property="og:image" content="https://worldfactbookarchive.org/static/img/share/world-factbook-archive-v2.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="World Factbook Archive: country profiles, maps, comparisons, and analysis from 1990–2025.">
+  <meta property="og:url" content="https://worldfactbookarchive.org/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CIA World Factbook Archive">
+  <meta name="twitter:description" content="Explore CIA World Factbooks from 1990–2025: country profiles, maps, comparisons, and analysis.">
+  <meta name="twitter:image" content="https://worldfactbookarchive.org/static/img/share/world-factbook-archive-v2.png">
+  <meta name="twitter:image:alt" content="World Factbook Archive: country profiles, maps, comparisons, and analysis from 1990–2025.">
+  
+  <link rel="canonical" href="https://worldfactbookarchive.org/">
+  <meta name="robots" content="index, follow">
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png?v=3">
+  <link rel="shortcut icon" href="/favicon.ico?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,301,400,401,500,501,700,701,900,901&display=swap">
+  <link rel="stylesheet" href="/static/css/brand-fonts.css?v=1">
+  <link rel="preload" href="/static/css/intel-theme.css?v=64" as="style">
+  <link rel="stylesheet" href="/static/css/intel-theme.css?v=64">
+  <script src="/static/js/visualization-palette.js?v=5"></script>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CIA World Factbook Archive",
+    "url": "https://worldfactbookarchive.org",
+    "description": "36 years of CIA World Factbook data (1990-2025). Search, browse, compare, and export over 1 million parsed fields across 281 entities.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://worldfactbookarchive.org/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "CIA World Factbook Archive 1990-2025",
+    "description": "Structured archive of 36 editions of the CIA World Factbook covering 281 entities with over 1 million parsed data fields. Includes demographics, economics, geography, military, communications, and government data.",
+    "url": "https://worldfactbookarchive.org",
+    "license": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "creator": {
+      "@type": "Organization",
+      "name": "Central Intelligence Agency",
+      "url": "https://www.cia.gov/the-world-factbook/"
+    },
+    "temporalCoverage": "1990/2025",
+    "spatialCoverage": { "@type": "Place", "name": "World" },
+    "distribution": {
+      "@type": "DataDownload",
+      "encodingFormat": "text/csv",
+      "contentUrl": "https://worldfactbookarchive.org/export"
+    },
+    "keywords": ["CIA World Factbook", "geopolitics", "country data", "demographics", "world statistics", "OSINT", "open source intelligence"]
+  }
+  </script>
+  <style>
+    /* Skip-to-content accessibility link */
+    .skip-to-content {
+      position: absolute; top: -100px; left: 16px; z-index: 10000;
+      background: var(--accent-primary, #7EE2B8); color: var(--accent-primary-ink, #080F14); padding: 8px 16px;
+      border-radius: 0 0 4px 4px; font-size: 0.85rem; text-decoration: none;
+      transition: top 200ms;
+    }
+    .skip-to-content:focus { top: 0; }
+    /* Brand logo (official emblem) — theme-aware swap */
+    .brand-logo { display: block; width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+    .brand-logo--light { display: none; }
+    [data-theme="light"] .brand-logo--dark { display: none; }
+    [data-theme="light"] .brand-logo--light { display: block; }
+    /* Global focus-visible outline */
+    :focus-visible {
+      outline: 2px solid var(--accent-primary, #7EE2B8);
+      outline-offset: 2px;
+    }
+    input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--accent-primary, #7EE2B8);
+      outline-offset: 0;
+    }
+    /* ── Global search modal (Ctrl+K) ──
+       UX upgrade: matches the missile-sim command palette's visual
+       quality. Fully opaque card (no transparency / no backdrop blur —
+       these were making text appear soft). Crisp font-smoothing for
+       legibility. Compact mono-style result rows. */
+    .gs-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(8,10,14,0.78);
+      z-index: 200;
+      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+      display: none;
+    }
+    .gs-backdrop.gs-open { display: block; }
+    .gs-modal {
+      position: fixed; top: 12vh; left: 50%; transform: translateX(-50%);
+      width: 92%; max-width: 640px; max-height: 64vh;
+      background: var(--bg-surface);          /* fully opaque, no backdrop bleed */
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.7),
+                  0 0 0 1px rgba(72,80,92,0.18);
+      z-index: 201;
+      display: none; flex-direction: column; overflow: hidden;
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: geometricPrecision;
+    }
+    .gs-modal.gs-open { display: flex; }
+    .gs-input-wrap {
+      display: flex; align-items: center; position: relative;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-body);
+    }
+    .gs-input-wrap svg {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none;
+    }
+    .gs-input {
+      flex: 1; min-width: 0; padding: 14px 12px 14px 44px; border: none;
+      background: transparent;
+      color: var(--text-heading); font-size: 1rem; outline: none !important; box-sizing: border-box;
+      font-family: var(--font-sans);
+      letter-spacing: 0.2px;
+    }
+    .gs-input::placeholder { color: var(--text-muted); }
+    .gs-close {
+      flex-shrink: 0; border: none; background: none; color: var(--text-muted);
+      cursor: pointer; width: 38px; height: 38px; border-radius: 4px;
+      font-size: 1.1rem; line-height: 1; margin-right: 6px;
+      display: inline-flex; align-items: center; justify-content: center;
+      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+    }
+    .gs-close:hover { color: var(--text-heading); background: var(--hover-overlay); }
+    .gs-results { overflow-y: auto; padding: 6px; flex: 1; scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+    .gs-results::-webkit-scrollbar { width: 5px; }
+    .gs-results::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+    .gs-group { margin-bottom: 2px; }
+    .gs-group-label {
+      padding: 8px 12px 4px; color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.65rem; text-transform: uppercase;
+      letter-spacing: 1.5px; font-weight: 700;
+    }
+    .gs-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: 4px; cursor: pointer;
+      color: var(--text-primary); text-decoration: none; transition: background 100ms, color 100ms;
+      min-height: 36px;
+      border-left: 2px solid transparent;
+    }
+    .gs-item:hover, .gs-item.gs-active {
+      background: color-mix(in srgb, var(--accent-primary) 10%, transparent); color: var(--text-heading);
+      text-decoration: none; border-left-color: var(--accent-primary);
+    }
+    .gs-item svg { flex-shrink: 0; opacity: 0.55; color: var(--text-muted); }
+    .gs-item.gs-active svg { opacity: 0.95; color: var(--accent-primary); }
+    .gs-meta {
+      margin-left: auto;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      color: var(--text-muted); white-space: nowrap;
+      padding: 2px 6px;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+    .gs-field-item { align-items: flex-start; }
+    .gs-item-body { flex: 1; min-width: 0; }
+    .gs-item-main { display: flex; align-items: center; gap: 8px; width: 100%; }
+    .gs-preview {
+      font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .gs-match {
+      background: rgba(240, 183, 38, 0.26);
+      border-radius: 2px;
+      color: var(--text-heading);
+      padding: 0 2px;
+    }
+    [data-theme="light"] .gs-match {
+      background: rgba(184, 134, 11, 0.22);
+      color: #111418;
+    }
+    .gs-empty {
+      padding: 28px 16px; text-align: center; color: var(--text-muted);
+      font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.5px;
+    }
+    .gs-hint {
+      display: flex; align-items: center; justify-content: center; gap: 18px;
+      padding: 8px 16px; border-top: 1px solid var(--border);
+      background: var(--bg-body);
+      color: var(--text-muted); font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.5px;
+    }
+    .gs-hint kbd {
+      padding: 2px 6px; border-radius: 3px;
+      background: var(--bg-elevated); color: var(--text-primary);
+      border: 1px solid var(--border-strong); font-family: var(--font-mono);
+      font-size: 0.7rem; line-height: 1;
+      box-shadow: 0 1px 0 var(--border-strong);
+    }
+    /* Breadcrumb navigation */
+    .breadcrumbs {
+      padding: var(--space-1) 0 var(--space-2); font-size: 0.88rem; color: var(--text-muted);
+      }
+    .breadcrumbs a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumbs a:hover { color: var(--accent-primary); }
+    .breadcrumbs .bc-sep { margin: 0 6px; opacity: 0.5; }
+    .breadcrumbs .bc-current { color: var(--text-secondary); }
+    @media (max-width: 800px) { .breadcrumbs { padding: var(--space-1) 0 var(--space-2); font-size: 0.84rem; } }
+    /* Global search highlight on arrival */
+    .gs-highlight {
+      outline: 2px solid #F0B726 !important;
+      outline-offset: 2px;
+      box-shadow: 0 0 12px rgba(240, 183, 38, 0.25);
+      transition: outline-color 300ms, box-shadow 300ms;
+    }
+    .gs-highlight-banner {
+      position: sticky; top: 88px; z-index: 50;
+      background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 4px;
+      padding: 8px 16px; display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem; color: var(--text-primary); margin-bottom: 16px;
+    }
+    .gs-highlight-banner .gs-hl-label { flex: 1; }
+    .gs-highlight-banner .gs-hl-dismiss {
+      background: none; border: 1px solid var(--border-strong); border-radius: 3px;
+      color: var(--text-secondary); cursor: pointer; font-size: 0.91rem; padding: 3px 8px;
+    }
+    .gs-highlight-banner .gs-hl-dismiss:hover { color: var(--text-primary); border-color: var(--text-muted); }
+    .gs-show-more {
+      display: block; width: calc(100% - 8px); padding: 8px 12px; margin: 4px 4px;
+      background: none; border: 1px dashed var(--border-strong); border-radius: 6px;
+      color: var(--text-muted); font-size: 0.91rem; cursor: pointer; text-align: center;
+      transition: color 150ms, border-color 150ms;
+    }
+    .gs-show-more:hover { color: var(--text-body); border-color: var(--text-muted); }
+    @media (max-width: 800px) {
+      .nav-search-trigger kbd { display: none; }
+      .gs-modal { top: 8vh; width: 95%; max-height: 70vh; }
+      .gs-item { min-height: 44px; }
+    }
+    /* ── Light-mode overrides for the global search modal (was hard-coded dark) ── */
+    [data-theme="light"] .gs-backdrop { background: rgba(15,23,32,0.35); }
+    [data-theme="light"] .gs-modal {
+      background: #FFFFFF; border-color: #D9DEE3; color: #0B1219;
+      box-shadow: 0 12px 48px rgba(15,23,32,0.18), 0 0 0 1px rgba(200,208,215,0.4);
+    }
+    [data-theme="light"] .gs-input-wrap { border-bottom-color: #E7EBEF; background: #F4F6F8; }
+    [data-theme="light"] .gs-input-wrap svg { color: #9AA4AC; }
+    [data-theme="light"] .gs-input { color: #0B1219; }
+    [data-theme="light"] .gs-input::placeholder { color: #9AA4AC; }
+    [data-theme="light"] .gs-close { color: #76828B; }
+    [data-theme="light"] .gs-close:hover { color: #0B1219; background: rgba(15,23,32,0.06); }
+    [data-theme="light"] .gs-group-label { color: #9AA4AC; }
+    [data-theme="light"] .gs-item { color: #33404A; }
+    [data-theme="light"] .gs-item:hover,
+    [data-theme="light"] .gs-item.gs-active { background: rgba(22,101,52,0.10); color: #0B1219; }
+    [data-theme="light"] .gs-item svg { color: #76828B; }
+    [data-theme="light"] .gs-meta { color: #76828B; background: #EEF1F4; border-color: #D9DEE3; }
+    [data-theme="light"] .gs-preview { color: #5C6873; }
+    [data-theme="light"] .gs-empty { color: #9AA4AC; }
+    [data-theme="light"] .gs-hint { border-top-color: #E7EBEF; background: #F4F6F8; color: #9AA4AC; }
+    [data-theme="light"] .gs-hint kbd { background: #EEF1F4; color: #33404A; border-color: #D9DEE3; box-shadow: 0 1px 0 #D9DEE3; }
+    [data-theme="light"] .gs-results::-webkit-scrollbar-thumb { background: #C8D0D7; }
+    [data-theme="light"] .gs-show-more { color: #76828B; }
+  </style>
+  
+  
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   HOMEPAGE — "Terminal Console" redesign (Direction A)
+   Self-contained, scoped under .fbh so the monospace art direction +
+   bespoke token palette never leak to the rest of the site. Tokens
+   react to the existing global theme toggle ([data-theme] on <html>).
+   ════════════════════════════════════════════════════════════════ */
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="trevortesch.github.io : ">
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+/* Keep the homepage's edge-to-edge sections inside the shared workspace cap. */
+body:has(.fbh) .main-full,
+.main-full:has(.fbh) { padding: 0; max-width: var(--workspace-max-width); }
 
-    <title>W in the's chat</title>
-  </head>
+/* ── Design tokens (dark default) ── */
+.fbh {
+  --bg2:#05080B; --bg:#080F14; --panel2:#0D141B; --ink:#0B1219; --band:#0A1017;
+  --imgbg:#0C141B; --chip:#182029; --hover:#11181F;
+  --line:#1C2731; --line2:#161E26; --line3:#243441;
+  --text:#F5F5F5; --text2:#D7DEE2; --dim:#93A1A9; --dim2:#6E7D86; --dim3:#56646C;
+  --green:#16A34A; --mint:#7EE2B8; --mintInk:#080F14; --greenline:#1E3A2B;
+  --cow-filter:brightness(0) invert(1); --logo-chip:transparent;
+}
+[data-theme="light"] .fbh {
+  --bg2:#E6E8EB; --bg:#F4F6F8; --panel2:#FFFFFF; --ink:#EEF1F4; --band:#ECEFF2;
+  --imgbg:#E2E6EA; --chip:#E4E9ED; --hover:#E7EBEF;
+  --line:#D9DEE3; --line2:#E7EBEF; --line3:#C8D0D7;
+  --text:#0B1219; --text2:#33404A; --dim:#5C6873; --dim2:#76828B; --dim3:#9AA4AC;
+  --green:#16A34A; --mint:#0E9E6E; --mintInk:#FFFFFF; --greenline:#CDE7DA;
+  --cow-filter:brightness(0); --logo-chip:#11181F;
+}
 
-  <body>
+@keyframes fbh-blink { 0%,48%{opacity:1} 49%,100%{opacity:0} }
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/trevortesch">View on GitHub</a>
+.fbh {
+  font-family: 'IBM Plex Mono', ui-monospace, 'Consolas', monospace;
+  background: var(--bg);
+  color: var(--text2);
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.fbh * { box-sizing: border-box; }
+.fbh, .fbh * { transition: background-color .25s ease, border-color .25s ease, color .25s ease; }
+.fbh a { text-decoration: none; }
+.fbh img { max-width: 100%; }
+.fbh h1, .fbh h2, .fbh h3, .fbh p { margin: 0; }
 
-          <h1 id="project_title">Description: AuthTrevor</h1>
-          <h2 id="project_tagline"></h2>
+/* ── Hero ── */
+.fbh-hero { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(24px, 4vw, 80px); padding:var(--space-6) 56px; }
+.fbh-eyebrow { font:600 0.6875rem/1 'IBM Plex Mono',monospace; letter-spacing:.22em; color:var(--mint); margin-bottom:var(--space-3); }
+.fbh-h1 { font:800 clamp(1.875rem, 2.4vw, 3.5rem)/1.12 'IBM Plex Mono',monospace; letter-spacing:-.02em; color:var(--text); }
+.fbh-h1 .yr { color:var(--mint); }
+.fbh-lead { margin-top:var(--space-4); max-width:64ch; font:400 clamp(0.875rem, 1vw, 1.125rem)/1.65 'IBM Plex Mono',monospace; color:var(--dim); }
+.fbh-coming { margin-top:16px; padding:6px 0 6px 12px; border-left:2px solid var(--mint); max-width:64ch; font:400 0.75rem/1.6 'IBM Plex Mono',monospace; color:var(--text2); }
+.fbh-coming strong { display:block; margin-bottom:4px; color:var(--mint); font-weight:600; }
+.fbh-cmd {
+  margin-top:var(--space-4); display:flex; align-items:center; border:1px solid var(--greenline);
+  border-radius:7px; background:var(--ink); max-width:560px; overflow:hidden; cursor:pointer;
+}
+.fbh-cmd:hover { border-color:var(--mint); }
+.fbh-cmd .prompt { padding:0 14px; color:var(--mint); font:600 0.875rem/1 'IBM Plex Mono',monospace; }
+.fbh-cmd .ph { flex:1; padding:16px 0; color:var(--dim); font:400 0.8125rem/1 'IBM Plex Mono',monospace; }
+.fbh-cmd .cursor { display:inline-block; width:8px; height:15px; background:var(--mint); margin-left:4px; vertical-align:-2px; animation:fbh-blink 1.1s steps(1) infinite; }
+.fbh-cmd .kbd { padding:0 16px; align-self:stretch; display:flex; align-items:center; font:500 0.625rem/1 'IBM Plex Mono',monospace; color:var(--dim2); border-left:1px solid var(--line); }
+.fbh-btns { margin-top:24px; display:flex; gap:12px; flex-wrap:wrap; }
+.fbh-btn-primary { padding:14px 22px; background:var(--mint); color:var(--mintInk); font:700 0.75rem/1 'IBM Plex Mono',monospace; letter-spacing:.02em; border-radius:7px; }
+.fbh-btn-primary:hover { filter:brightness(1.06); }
+.fbh-btn-ghost { padding:14px 22px; border:1px solid var(--line3); color:var(--text2); font:600 0.75rem/1 'IBM Plex Mono',monospace; border-radius:7px; }
+.fbh-btn-ghost:hover { border-color:var(--mint); color:var(--text); }
 
-        </header>
+/* ── Library panel ── */
+.fbh-lib { border:1px solid var(--line); border-radius:9px; overflow:hidden; background:var(--panel2); }
+.fbh-lib-head { display:flex; align-items:center; gap:7px; height:32px; padding:0 12px; border-bottom:1px solid var(--line); font:500 0.5625rem/1 'IBM Plex Mono',monospace; color:var(--dim2); letter-spacing:.1em; }
+.fbh-dot { width:8px; height:8px; border-radius:50%; }
+.fbh-lib-grid { padding:14px; display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+.fbh-flag-card { display:flex; align-items:center; gap:10px; padding:10px 11px; border:1px solid var(--line); border-radius:7px; background:var(--ink); }
+.fbh-flag-card:hover { border-color:var(--line3); }
+.fbh-flag { font-size:1.0625rem; line-height:1; flex:none; }
+.fbh-flag-card .nm { font:700 0.6875rem/1.1 'IBM Plex Mono',monospace; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fbh-flag-card .mt { margin-top:4px; font:500 0.5rem/1 'IBM Plex Mono',monospace; color:var(--dim2); letter-spacing:.03em; }
+.fbh-lib-foot { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-top:1px solid var(--line); font:600 0.5625rem/1 'IBM Plex Mono',monospace; letter-spacing:.06em; }
+.fbh-cap { margin-top:13px; font:500 0.625rem/1.5 'IBM Plex Mono',monospace; color:var(--dim2); letter-spacing:.03em; }
+
+/* ── Stat band ── */
+.fbh-stats { display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line2); border-bottom:1px solid var(--line2); background:var(--band); }
+.fbh-stat { padding:var(--space-4) 28px; border-right:1px solid var(--line2); }
+.fbh-stat:last-child { border-right:none; }
+.fbh-stat .num { font:800 1.75rem/1 'IBM Plex Mono',monospace; color:var(--text); letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
+.fbh-stat .num.mint { color:var(--mint); }
+.fbh-stat .lbl { margin-top:10px; font:500 0.625rem/1 'IBM Plex Mono',monospace; letter-spacing:.16em; color:var(--dim2); }
+
+/* ── Tier marker (From the Factbook) ── */
+.fbh-tier { padding:var(--space-6) 56px 0; }
+.fbh-tier-row { display:flex; align-items:center; gap:16px; }
+.fbh-tier-row .lead { font:700 0.625rem/1 'IBM Plex Mono',monospace; color:var(--mint); letter-spacing:.16em; }
+.fbh-rule { flex:1; height:1px; background:var(--line); }
+.fbh-tier-row .note { font:500 0.625rem/1 'IBM Plex Mono',monospace; color:var(--dim3); letter-spacing:.04em; }
+
+/* ── Numbered sections ── */
+.fbh-sec { padding:16px 56px 10px; }
+.fbh-sec.s02 { padding-top:24px; }
+.fbh-sec.s03 { padding-top:20px; }
+.fbh-sec.s04 { padding:24px 56px 0; }
+.fbh-sec-head { display:flex; align-items:baseline; gap:18px; margin-bottom:14px; }
+.fbh-sec-num { font:800 0.75rem/1 'IBM Plex Mono',monospace; color:var(--mint); letter-spacing:.08em; }
+.fbh-sec-label { font:600 0.625rem/1 'IBM Plex Mono',monospace; color:var(--dim2); letter-spacing:.22em; }
+.fbh-sec-top { display:flex; align-items:flex-end; justify-content:space-between; gap:40px; }
+.fbh-sec-top h2 { font:700 1.25rem/1.2 'IBM Plex Mono',monospace; color:var(--text); letter-spacing:-.01em; }
+.fbh-sec-top p { margin-top:14px; max-width:620px; font:400 0.8125rem/1.65 'IBM Plex Mono',monospace; color:var(--dim); }
+.fbh-sec-link { font:600 0.6875rem/1 'IBM Plex Mono',monospace; color:var(--mint); white-space:nowrap; border-bottom:1px solid var(--mint); padding-bottom:4px; }
+.fbh-sec-link:hover { filter:brightness(1.1); }
+
+/* Quick-link tiles (01) */
+.fbh-quick { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px; }
+.fbh-tile { padding:20px; border:1px solid var(--line); border-radius:9px; background:var(--panel2); }
+.fbh-tile:hover { border-color:var(--line3); }
+.fbh-tile .t { font:700 0.75rem/1 'IBM Plex Mono',monospace; color:var(--mint); }
+.fbh-tile .s { margin-top:9px; font:400 0.6875rem/1.55 'IBM Plex Mono',monospace; color:var(--dim2); }
+
+/* Analysis cards (02) */
+.fbh-cards3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px; }
+.fbh-card { border:1px solid var(--line); border-radius:9px; overflow:hidden; background:var(--panel2); }
+.fbh-card:hover { border-color:var(--line3); }
+.fbh-card .imgwrap { position:relative; aspect-ratio:16/10; background:var(--imgbg); }
+.fbh-card .imgwrap img { width:100%; height:100%; object-fit:cover; display:block; }
+.fbh-card .body { padding:16px 18px; }
+.fbh-card .body .t { font:700 0.75rem/1 'IBM Plex Mono',monospace; color:var(--text); }
+.fbh-card .body .s { margin-top:8px; font:400 0.6875rem/1.5 'IBM Plex Mono',monospace; color:var(--dim2); }
+.fbh-also { margin-top:16px; display:flex; flex-wrap:wrap; gap:8px 18px; font:500 0.625rem/1.6 'IBM Plex Mono',monospace; color:var(--dim2); }
+.fbh-also a { color:var(--dim2); }
+.fbh-also a:hover { color:var(--text); }
+.fbh-also .k { color:var(--dim3); }
+
+/* Tier band (Beyond the Factbook) */
+.fbh-band { margin-top:24px; padding:26px 56px; background:var(--band); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.fbh-band-row { display:flex; align-items:flex-end; justify-content:space-between; gap:48px; }
+.fbh-band .eyebrow { font:700 0.6875rem/1 'IBM Plex Mono',monospace; color:var(--mint); letter-spacing:.22em; margin-bottom:14px; }
+.fbh-band h2 { font:800 1.375rem/1.1 'IBM Plex Mono',monospace; color:var(--text); letter-spacing:-.02em; }
+.fbh-band p { max-width:450px; font:400 0.6875rem/1.7 'IBM Plex Mono',monospace; color:var(--dim); }
+.fbh-band p em { color:var(--text); font-style:normal; }
+
+/* Spotlight band (03) — stays dark in BOTH themes (hard-coded literals) */
+.fbh-spot { position:relative; border:1px solid #1E3A2B; border-radius:13px; overflow:hidden; min-height:380px; background:#0D141B; }
+.fbh-spot > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.6; }
+/* Brighten the dark map image in light mode so the band doesn't read as murky (band itself stays dark by design) */
+[data-theme="light"] .fbh-spot > img { opacity:.82; filter:brightness(1.5) saturate(1.08); }
+.fbh-spot .grad { position:absolute; inset:0; background:linear-gradient(90deg,#080F14 6%,rgba(8,15,20,.8) 46%,rgba(8,15,20,.25) 100%); }
+/* Light mode: lighten the band to a medium slate so it's less stark on a light page (still dark enough for white text) */
+[data-theme="light"] .fbh-spot { background:#27333E; border-color:#3A4854; }
+[data-theme="light"] .fbh-spot .grad { background:linear-gradient(90deg,#27333E 6%,rgba(39,51,62,.8) 46%,rgba(39,51,62,.2) 100%); }
+.fbh-spot .tag { position:absolute; top:18px; right:20px; font:500 0.5625rem/1 'IBM Plex Mono',monospace; letter-spacing:.18em; color:#6E7D86; }
+.fbh-spot .content { position:relative; padding:44px 46px; max-width:600px; }
+.fbh-spot .chip { display:inline-block; padding:5px 10px; background:#7EE2B8; color:#080F14; font:700 0.5625rem/1 'IBM Plex Mono',monospace; letter-spacing:.12em; border-radius:4px; }
+.fbh-spot h3 { margin-top:18px; font:800 1.5rem/1.1 'IBM Plex Mono',monospace; color:#F5F5F5; letter-spacing:-.02em; }
+.fbh-spot p { margin-top:16px; font:400 0.8125rem/1.65 'IBM Plex Mono',monospace; color:#D7DEE2; }
+.fbh-spot .btns { margin-top:var(--space-4); display:flex; gap:12px; flex-wrap:wrap; }
+.fbh-spot .b1 { padding:13px 21px; background:#7EE2B8; color:#080F14; font:700 0.6875rem/1 'IBM Plex Mono',monospace; letter-spacing:.02em; border-radius:7px; }
+.fbh-spot .b1:hover { filter:brightness(1.06); }
+.fbh-spot .b2 { padding:13px 21px; border:1px solid #243441; color:#D7DEE2; font:600 0.6875rem/1 'IBM Plex Mono',monospace; border-radius:7px; }
+.fbh-spot .b2:hover { border-color:#7EE2B8; }
+
+/* Collections + About (04) */
+.fbh-04 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.fbh-04-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.fbh-col-card { padding:18px; border:1px solid var(--line); border-radius:9px; background:var(--panel2); }
+.fbh-col-card:hover { border-color:var(--line3); }
+.fbh-col-card .t { display:block; font:700 0.75rem/1 'IBM Plex Mono',monospace; color:var(--text); }
+.fbh-col-card .s { margin-top:8px; font:400 0.6875rem/1.5 'IBM Plex Mono',monospace; color:var(--dim2); }
+.fbh-col-card .s a { color:inherit; }
+.fbh-col-card .s a:hover { color:var(--text); text-decoration:underline; }
+.fbh-about { padding:24px; border:1px solid var(--line); border-radius:11px; background:var(--panel2); display:flex; gap:20px; align-items:center; }
+.fbh-about:hover { border-color:var(--line3); }
+.fbh-about img { width:96px; height:96px; object-fit:contain; flex:none; filter:var(--cow-filter); }
+.fbh-about .eyebrow { font:600 0.625rem/1 'IBM Plex Mono',monospace; color:var(--mint); letter-spacing:.18em; }
+.fbh-about p { margin-top:12px; font:400 0.6875rem/1.6 'IBM Plex Mono',monospace; color:var(--dim); }
+
+.fbh-bottom { height:24px; }
+
+/* ── Hover highlights (tasteful "Palantir-lite": lift + brighter border + soft mint glow) ── */
+.fbh-tile, .fbh-card, .fbh-col-card { position: relative; transition: border-color .2s ease, box-shadow .28s ease, transform .12s ease-out; will-change: transform; }
+.fbh-tile:hover, .fbh-card:hover, .fbh-col-card:hover {
+  border-color: var(--line3);
+  box-shadow: 0 14px 32px -16px rgba(0,0,0,.6), 0 0 24px -10px var(--mint);
+}
+.fbh-card .imgwrap img { transition: transform .4s cubic-bezier(.2,.7,.3,1); }
+.fbh-card:hover .imgwrap img { transform: scale(1.05); }
+/* Cursor-following glow (Palantir-style) */
+.fbh-tile::after, .fbh-card::after, .fbh-col-card::after {
+  content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:2;
+  background: radial-gradient(340px circle at var(--mx,50%) var(--my,50%), rgba(126,226,184,.13), transparent 46%);
+  opacity:0; transition:opacity .3s ease;
+}
+.fbh-tile:hover::after, .fbh-card:hover::after, .fbh-col-card:hover::after { opacity:1; }
+.fbh-flag-card { transition: border-color .2s ease, background-color .2s ease; }
+.fbh-flag-card:hover { border-color: var(--line3); background: var(--hover); }
+.fbh-cmd { transition: border-color .2s ease, box-shadow .25s ease; }
+.fbh-cmd:hover { box-shadow: 0 0 22px -12px var(--mint); }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .fbh-hero { grid-template-columns:1fr; gap:var(--space-6); padding:var(--space-6) 40px; }
+  .fbh-h1 { font-size:2.5625rem; }
+  .fbh-sec, .fbh-tier, .fbh-sec.s04 { padding-left:40px; padding-right:40px; }
+  .fbh-band { padding-left:40px; padding-right:40px; }
+  .fbh-quick { grid-template-columns:repeat(2,1fr); }
+  .fbh-cards3 { grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .fbh-hero { padding:var(--space-4) 22px var(--space-6); }
+  .fbh-h1 { font-size:2.125rem; }
+  .fbh-sec, .fbh-tier, .fbh-sec.s04 { padding-left:22px; padding-right:22px; }
+  .fbh-band { padding:32px 22px; }
+  .fbh-band-row { flex-direction:column; align-items:flex-start; gap:18px; }
+  .fbh-sec-top { flex-direction:column; align-items:flex-start; gap:14px; }
+  .fbh-stats { grid-template-columns:1fr 1fr; }
+  .fbh-stat:nth-child(2) { border-right:none; }
+  .fbh-stat:nth-child(1), .fbh-stat:nth-child(2) { border-bottom:1px solid var(--line2); }
+  .fbh-quick { grid-template-columns:1fr 1fr; }
+  .fbh-cards3 { grid-template-columns:1fr; }
+  .fbh-04 { grid-template-columns:1fr; }
+  .fbh-stat .num { font-size:1.9375rem; }
+}
+@media (max-width: 480px) {
+  .fbh-lib-grid { grid-template-columns:1fr; }
+  .fbh-04-cards { grid-template-columns:1fr; }
+  .fbh-about { flex-direction:column; align-items:flex-start; }
+}
+</style>
+
+  
+  
+</head>
+<body>
+<a href="#main-content" class="skip-to-content">Skip to main content</a>
+<noscript><style>#page-loader { display: none !important; }</style></noscript>
+<div id="page-loader" style="position:fixed;inset:0;z-index:9999;background:var(--bg-body,var(--bg-body));display:flex;align-items:center;justify-content:center;transition:opacity 0.4s ease;">
+  <div style="width:28px;height:28px;border:3px solid var(--border,var(--border));border-top-color:var(--accent-primary,#7EE2B8);border-radius:50%;animation:pl-spin 0.7s linear infinite;"></div>
+</div>
+<style>@keyframes pl-spin{to{transform:rotate(360deg);}}</style>
+<script>
+(function(){
+  var hidden = false;
+  function hidePageLoader(){
+    if (hidden) return;
+    hidden = true;
+    var el = document.getElementById('page-loader');
+    if (el) {
+      el.style.opacity = '0';
+      setTimeout(function(){ el.remove(); }, 400);
+    }
+  }
+  window.addEventListener('DOMContentLoaded', hidePageLoader, { once: true });
+  setTimeout(hidePageLoader, 1500);
+})();
+</script>
+
+<div class="top-banner">
+  <span class="top-banner-label">OPEN SOURCE INTELLIGENCE</span>
+  <div class="world-clocks" id="world-clocks">
+    <div class="wc-item"><span class="wc-city">DC</span><span class="wc-time" id="wc-dc">--:--</span></div>
+    <div class="wc-sep"></div>
+    <div class="wc-item"><span class="wc-city">LON</span><span class="wc-time" id="wc-lon">--:--</span></div>
+    <div class="wc-sep"></div>
+    <div class="wc-item"><span class="wc-city">MOW</span><span class="wc-time" id="wc-mow">--:--</span></div>
+    <div class="wc-sep"></div>
+    <div class="wc-item"><span class="wc-city">TLV</span><span class="wc-time" id="wc-tlv">--:--</span></div>
+    <div class="wc-sep"></div>
+    <div class="wc-item"><span class="wc-city">DEL</span><span class="wc-time" id="wc-del">--:--</span></div>
+    <div class="wc-sep"></div>
+    <div class="wc-item"><span class="wc-city">BEI</span><span class="wc-time" id="wc-bei">--:--</span></div>
+    <div class="wc-sep"></div>
+    <div class="wc-item"><span class="wc-city">TYO</span><span class="wc-time" id="wc-tyo">--:--</span></div>
+  </div>
+</div>
+
+<div class="topbar">
+  <a href="/" class="topbar-brand" aria-label="CIA World Factbook Archive">
+    <img class="brand-logo" src="/static/img/brand/wfa_logo.png?v=2" width="30" height="30" alt="" aria-hidden="true">
+    <span class="brand-wordmark" aria-hidden="true">CIA World Factbook Archive</span>
+  </a>
+
+  <nav class="topbar-nav" id="topbar-nav">
+    <div class="nav-group">
+      <a href="/" class="nav-group-trigger active-group" style="text-decoration:none;">Home</a>
+    </div>
+    <div class="nav-group">
+      <button class="nav-group-trigger ">
+        The Archive
+        <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-dropdown">
+        <a href="/archive" class="">The Archive</a>
+        
+        <a href="/archive/media" class="">Media Archive</a>
+        
+        <a href="/search" class="">Search Fields</a>
+        <a href="/archive/saved" class="">Saved Research <span class="research-count" data-research-count hidden>0</span></a>
+        <a href="/export" class="">Data Export</a>
+        <a href="/analysis/quiz" class="">Factbook Quiz</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <button class="nav-group-trigger ">
+        Factbook Analysis
+        <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-dropdown mega" style="grid-template-columns:repeat(3,1fr);min-width:580px;">
+        <div class="mega-col">
+          <a href="/analysis" class="">Overview</a>
+          <a href="/analysis/regional" class="">Regional Dashboard</a>
+          <a href="/analysis/dossier" class="">Country Dossier</a>
+          <div class="dd-section">Themed Analysis</div>
+          <a href="/analysis/geopolitical" class="">Geopolitical</a>
+          <a href="/analysis/people" class="">People &amp; Society</a>
+          <a href="/analysis/economy" class="">Economy &amp; Trade</a>
+        </div>
+        <div class="mega-col">
+          <div class="dd-section">Compare &amp; Visualize</div>
+          <a href="/analysis/indicators" class="">Indicators</a>
+          <a href="/analysis/compare" class="">Compare</a>
+          <a href="/analysis/compare?tab=diff">Text Diff</a>
+          <a href="/analysis/maps" class="">Maps</a>
+          <a href="/analysis/explorer" class="">Advanced Analytics</a>
+        </div>
+        <div class="mega-col">
+          <div class="dd-section">Data &amp; Tools</div>
+          <a href="/analysis/data" class="">Data Explorer</a>
+          <a href="/analysis/data#structured">Structured Values</a>
+          <a href="/analysis/data#gaps">Gap Analysis</a>
+          <a href="/analysis/tools" class="">Query Builder</a>
+          <a href="/analysis/tools#dashboard">Dashboard Builder</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-group">
+      <button class="nav-group-trigger ">
+        Intelligence Studies &amp; OSINT
+        <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-dropdown mega" style="grid-template-columns:repeat(3,1fr);min-width:580px;">
+        <div class="mega-col">
+          <a href="/cia-resources" class="">Overview</a>
+          <a href="/analysis/atlas" class="">Intelligence Atlas</a>
+          <a href="/analysis/missiles" class="">Nuclear &amp; Missile Threats</a>
+          <a href="/analysis/csi" class="">CSI Library</a>
+        </div>
+        <div class="mega-col">
+          <div class="dd-section">Studies in Intelligence</div>
+          <a href="/analysis/csi/biological-weapons" class="">Biological Weapons &amp; Intelligence</a>
+          <a href="/analysis/csi/cold-war" class="">Cold War</a>
+          <a href="/analysis/csi/counterintelligence" class="">Counterintelligence</a>
+          <a href="/analysis/csi/cryptography" class="">Cryptography</a>
+          <a href="/analysis/csi/espionage" class="">Espionage &amp; HUMINT</a>
+          <a href="/analysis/csi/great-power" class="">Great Power Rivalry</a>
+          <a href="/analysis/csi/terrorism" class="">Terrorism</a>
+          <a href="/analysis/csi/browse" class="">Browse Articles</a>
+        </div>
+        <div class="mega-col">
+          <div class="dd-section">Other Collections</div>
+          <a href="/analysis/world-leaders" class="">Foreign Leaders</a>
+          <a href="/analysis/flock" class="">Flock Surveillance</a>
+          <a href="/maps" class="">CIA Maps</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-group">
+      <button class="nav-group-trigger ">
+        Reference
+        <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-dropdown">
+        <a href="/apps" class="">Get the App</a>
+        <a href="/about" class="">About</a>
+        <a href="/sources" class="">Sources &amp; Methodology</a>
+        <a href="/archive/raw-sources" class="">Raw Source Files</a>
+        <a href="/analysis/data#structured" class="">Structured Field Data</a>
+        <a href="/api" class="">API Documentation</a>
+        <a href="/report" class="">Report a Bug</a>
+      </div>
+    </div>
+  </nav>
+
+  <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle color theme" title="Toggle light/dark mode" style="margin:0 10px 0 0;">
+    <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <span class="theme-label-dark">Light</span>
+    <span class="theme-label-light">Dark</span>
+  </button>
+
+  <details class="color-vision-control" id="color-vision-control">
+    <summary aria-label="Color distinction settings" title="Color distinction settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c-2.2-2.2-3.3-5.2-3.3-9S9.8 5.2 12 3Z"/><path d="M3 12h18"/></svg>
+    </summary>
+    <div class="color-vision-menu" role="radiogroup" aria-label="Color distinction profile">
+      <div class="color-vision-heading">Color distinction</div>
+      <button type="button" data-color-vision-option="default" role="radio" aria-checked="true" onclick="setColorVision('default')">
+        <span class="vision-swatches default" aria-hidden="true"><i></i><i></i><i></i></span><span>Default</span>
+      </button>
+      <button type="button" data-color-vision-option="red-green" role="radio" aria-checked="false" onclick="setColorVision('red-green')">
+        <span class="vision-swatches red-green" aria-hidden="true"><i></i><i></i><i></i></span><span>Red-green safe</span>
+      </button>
+      <button type="button" data-color-vision-option="blue-yellow" role="radio" aria-checked="false" onclick="setColorVision('blue-yellow')">
+        <span class="vision-swatches blue-yellow" aria-hidden="true"><i></i><i></i><i></i></span><span>Blue-yellow safe</span>
+      </button>
+      <button type="button" data-color-vision-option="high-contrast" role="radio" aria-checked="false" onclick="setColorVision('high-contrast')">
+        <span class="vision-swatches high-contrast" aria-hidden="true"><i></i><i></i><i></i></span><span>High contrast</span>
+      </button>
+    </div>
+  </details>
+
+  <div class="text-size-control" role="group" aria-label="Text size">
+    <button type="button" class="text-size-btn" data-text-size-option="compact" onclick="setTextSize('compact')" aria-label="Compact text" aria-pressed="false" title="Compact text">A-</button>
+    <button type="button" class="text-size-btn" data-text-size-option="standard" onclick="setTextSize('standard')" aria-label="Standard text" aria-pressed="false" title="Standard text">A</button>
+    <button type="button" class="text-size-btn active" data-text-size-option="large" onclick="setTextSize('large')" aria-label="Large text" aria-pressed="true" title="Large text">A+</button>
+  </div>
+
+  <div class="topbar-search" onclick="openSearchModal()" title="Search (Ctrl+K)">
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+    <span>Search...</span>
+    <kbd>Ctrl K</kbd>
+  </div>
+
+  <button class="topbar-hamburger" aria-label="Menu" aria-controls="topbar-nav" aria-expanded="false" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-nav-backdrop" onclick="closeMobileNav()"></div>
+
+<main class="main-full" id="main-content">
+  
+  
+<div class="fbh">
+
+  <!-- ── Hero ── -->
+  <section class="fbh-hero">
+    <div>
+      <div class="fbh-eyebrow">GLOBAL DATA // PUBLIC-DOMAIN ARCHIVE</div>
+      <h1 class="fbh-h1">CIA World Factbook<br>Archive <span class="yr">1990&ndash;2025</span></h1>
+      <p class="fbh-lead">The Factbook was discontinued Feb 4, 2026. Archived editions spanning 36 years, 285 entities and 1,071,313 fields are preserved as machine-readable, searchable data.</p>
+
+      <aside class="fbh-coming" aria-label="Upcoming archive additions">
+        <strong>Earlier editions coming soon</strong>
+        <p>In the coming days, we plan to add World Factbook data from 1981&ndash;1989 and data from its predecessor, the National Basic Intelligence Factbook, from 1975&ndash;1980.</p>
+      </aside>
+
+      <div class="fbh-cmd" role="button" tabindex="0" aria-label="Search the archive" onclick="openSearchModal()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSearchModal();}">
+        <span class="prompt">&rsaquo;</span>
+        <span class="ph">search 1,071,313 fields across 285 entities<span class="cursor"></span></span>
+        <span class="kbd">&#8984;K</span>
+      </div>
+
+      <div class="fbh-btns">
+        <a class="fbh-btn-primary" href="/archive">Browse the Archive &rarr;</a>
+        <a class="fbh-btn-ghost" href="/archive/media" style="padding-inline:14px;min-height:44px;">Media Archive</a>
+        <a class="fbh-btn-ghost" href="/apps">Get the App</a>
+        <a class="fbh-btn-ghost" href="factbook://tab/home" data-native-app-open>Open in app</a>
+      </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h2>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Twitch Description:</h2>
-
-<h4>
-Trevor D. Tesch, known professionally as AuthTrevor, is an American streamer and cybersecurity enthusiast. He focuses more on developing code and producing beats for himself, and he also wanted to act. Born in Pittsburgh, Pennsylvania, in 2013, he spent most of his childhood living there until he was 10, when he moved to Raleigh, North Carolina. Then he got a career on Twitch. He stated, “I want to connect with people who like me and inspire,” said in a private interview when he was only 13. He continues to create more content and engagement to his viewers and fanbase. He developed and coded mainly to get around his school restrictions; he was the first to stream real Minecraft in school.
-
-</h4>  
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p>Published with Permission. Forked from <a href="https://github.com/octocat/octocat.github.io">this.</a> Copyright (C) 2026 Trevor</p>
-      </footer>
+    <!-- Native flag-card library panel -->
+    <div>
+      <div class="fbh-lib">
+        <div class="fbh-lib-head">
+          <span class="fbh-dot" style="background:var(--mint)"></span>
+          <span class="fbh-dot" style="background:var(--green)"></span>
+          <span style="margin-left:8px">archive.library // 285 ENTITIES</span>
+        </div>
+        <div class="fbh-lib-grid">
+          
+          
+          <a class="fbh-flag-card" href="/archive/2025/AF">
+            <span class="fbh-flag">🇦🇫</span>
+            <div style="min-width:0">
+              <div class="nm">Afghanistan</div>
+              <div class="mt">AF · 1990–2025 · 36 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/AL">
+            <span class="fbh-flag">🇦🇱</span>
+            <div style="min-width:0">
+              <div class="nm">Albania</div>
+              <div class="mt">AL · 1990–2025 · 36 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/DZ">
+            <span class="fbh-flag">🇩🇿</span>
+            <div style="min-width:0">
+              <div class="nm">Algeria</div>
+              <div class="mt">DZ · 1990–2025 · 36 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/AD">
+            <span class="fbh-flag">🇦🇩</span>
+            <div style="min-width:0">
+              <div class="nm">Andorra</div>
+              <div class="mt">AD · 1990–2025 · 36 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/AO">
+            <span class="fbh-flag">🇦🇴</span>
+            <div style="min-width:0">
+              <div class="nm">Angola</div>
+              <div class="mt">AO · 1990–2025 · 36 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/AR">
+            <span class="fbh-flag">🇦🇷</span>
+            <div style="min-width:0">
+              <div class="nm">Argentina</div>
+              <div class="mt">AR · 1990–2025 · 36 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/AM">
+            <span class="fbh-flag">🇦🇲</span>
+            <div style="min-width:0">
+              <div class="nm">Armenia</div>
+              <div class="mt">AM · 1992–2025 · 34 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/AU">
+            <span class="fbh-flag">🇦🇺</span>
+            <div style="min-width:0">
+              <div class="nm">Australia</div>
+              <div class="mt">AU · 1990–2025 · 36 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/AT">
+            <span class="fbh-flag">🇦🇹</span>
+            <div style="min-width:0">
+              <div class="nm">Austria</div>
+              <div class="mt">AT · 1990–2025 · 36 yrs</div>
+            </div>
+          </a>
+          
+          <a class="fbh-flag-card" href="/archive/2025/AZ">
+            <span class="fbh-flag">🇦🇿</span>
+            <div style="min-width:0">
+              <div class="nm">Azerbaijan</div>
+              <div class="mt">AZ · 1992–2025 · 34 yrs</div>
+            </div>
+          </a>
+          
+        </div>
+        <div class="fbh-lib-foot">
+          <a href="/archive?view=table" style="color:var(--dim2)">+ 275 MORE ENTITIES</a>
+          <a href="/archive?view=table" style="color:var(--mint)">BROWSE ALL A&ndash;Z &rarr;</a>
+        </div>
+      </div>
+      <div class="fbh-cap">&#9612; ARCHIVE LIBRARY &mdash; every country, territory &amp; dependency, 1990&ndash;2025.</div>
     </div>
+  </section>
 
-  </body>
+  <!-- ── Stat band ── -->
+  <section class="fbh-stats">
+    <div class="fbh-stat">
+      <div class="num" data-count="285">0</div>
+      <div class="lbl">ENTITIES</div>
+    </div>
+    <div class="fbh-stat">
+      <div class="num" data-count="36">0</div>
+      <div class="lbl">EDITIONS · 1990–2025</div>
+    </div>
+    <div class="fbh-stat">
+      <div class="num" data-count="9535">0</div>
+      <div class="lbl">COUNTRY-YEAR RECORDS</div>
+    </div>
+    <div class="fbh-stat">
+      <div class="num mint" data-count="1071313">0</div>
+      <div class="lbl">PARSED DATA FIELDS</div>
+    </div>
+  </section>
+
+  <!-- ── Tier marker: From the Factbook ── -->
+  <div class="fbh-tier">
+    <div class="fbh-tier-row">
+      <span class="lead">&#9612; FROM THE CIA WORLD FACTBOOK</span>
+      <span class="fbh-rule"></span>
+      <span class="note">01–02 · published editions, 1990–2025</span>
+    </div>
+  </div>
+
+  <!-- ── 01 The Archive ── -->
+  <section class="fbh-sec s01">
+    <div class="fbh-sec-head">
+      <span class="fbh-sec-num">01</span>
+      <span class="fbh-sec-label">THE ARCHIVE</span>
+      <span class="fbh-rule"></span>
+    </div>
+    <div class="fbh-sec-top">
+      <div>
+        <h2>Factbook Archive</h2>
+        <p>Raw field data as published &mdash; full-text search, time-series tracking, text diffs, and exports across every edition.</p>
+      </div>
+      <a class="fbh-sec-link" href="/archive">Browse the Archive &rarr;</a>
+    </div>
+    <div class="fbh-quick">
+      <a class="fbh-tile" href="/archive?view=timeline"><div class="t">&rarr; Browse by Year</div><div class="s">All 36 editions, 1990–2025</div></a>
+      <a class="fbh-tile" href="/archive/field/US/Population"><div class="t">&rarr; Field Time Series</div><div class="s">Track any field across 36 years</div></a>
+      <a class="fbh-tile" href="/export"><div class="t">&rarr; Data Export</div><div class="s">CSV, Excel &amp; PDF reports</div></a>
+      <a class="fbh-tile" href="/analysis/quiz"><div class="t">&rarr; Factbook Quiz</div><div class="s">4 game modes</div></a>
+    </div>
+  </section>
+
+  <!-- ── 02 Factbook Analysis ── -->
+  <section class="fbh-sec s02">
+    <div class="fbh-sec-head">
+      <span class="fbh-sec-num">02</span>
+      <span class="fbh-sec-label">FACTBOOK ANALYSIS</span>
+      <span class="fbh-rule"></span>
+    </div>
+    <div class="fbh-sec-top">
+      <div>
+        <h2>Interactive Analysis</h2>
+        <p>Choropleth maps, time-series comparisons and country dossiers &mdash; every value computed directly from published Factbook editions, formatted to ICD 203 standards.</p>
+      </div>
+      <a class="fbh-sec-link" href="/analysis">All tools &rarr;</a>
+    </div>
+    <div class="fbh-cards3">
+      <a class="fbh-card" href="/analysis/regional">
+        <div class="imgwrap"><img data-fbh-swap src="/static/img/screenshots/regional_dashboard_demo.gif" alt="Regional Dashboard" loading="lazy"></div>
+        <div class="body"><div class="t">Regional Dashboard</div><div class="s">COCOM maps &amp; live indicators</div></div>
+      </a>
+      <a class="fbh-card" href="/analysis/timeline">
+        <div class="imgwrap"><img data-fbh-swap src="/static/img/screenshots/timeline_map_demo.gif" alt="Timeline Map" loading="lazy"></div>
+        <div class="body"><div class="t">Timeline Map</div><div class="s">Animated choropleth, 36 years</div></div>
+      </a>
+      <a class="fbh-card" href="/analysis/rankings">
+        <div class="imgwrap"><img data-fbh-swap src="/static/img/screenshots/rankings.png" alt="Global Rankings" loading="lazy"></div>
+        <div class="body"><div class="t">Global Rankings</div><div class="s">Sort countries by any indicator</div></div>
+      </a>
+    </div>
+    <div class="fbh-also">
+      <span class="k">ALSO:</span>
+      <a href="/analysis/compare">Compare Countries</a><span class="k">·</span>
+      <a href="/analysis/people">Demographics</a><span class="k">·</span>
+      <a href="/analysis/scatter">Scatter / Regression</a><span class="k">·</span>
+      <a href="/analysis/networks?tab=trade">Trade Networks</a><span class="k">·</span>
+      <a href="/analysis/query-builder">Query Builder</a>
+    </div>
+  </section>
+
+  <!-- ── Tier band: Beyond the Factbook ── -->
+  <section class="fbh-band">
+    <div class="fbh-band-row">
+      <div>
+        <div class="eyebrow">&#9612; BEYOND THE FACTBOOK</div>
+        <h2>Open-Source Intelligence Layers</h2>
+      </div>
+      <p>Sections 03–04 layer open-source intelligence <em>on top of</em> the archive &mdash; combining Factbook data with external sources (FAS, SIPRI, CSIS, ACA, IAEA &amp; CIA.gov) to go further than the Factbook alone.</p>
+    </div>
+  </section>
+
+  <!-- ── 03 OSINT // Intelligence Spotlight ── -->
+  <section class="fbh-sec s03">
+    <div class="fbh-sec-head">
+      <span class="fbh-sec-num">03</span>
+      <span class="fbh-sec-label">OSINT // INTELLIGENCE SPOTLIGHT</span>
+      <span class="fbh-rule"></span>
+    </div>
+    <div class="fbh-spot">
+      <img src="/static/img/screenshots/missiles_russia_us.png" alt="Nuclear &amp; Missile Simulation">
+      <div class="grad"></div>
+      <div class="tag">// STRATEGIC MODEL</div>
+      <div class="content">
+        <span class="chip">UPDATED</span>
+        <h3>Nuclear &amp; Missile Simulation</h3>
+        <p>200+ facilities, trajectory modeling, MIRV warheads, defense intercept and fallout analysis &mdash; an interactive strategic model built on data beyond the Factbook.</p>
+        <div class="btns">
+          <a class="b1" href="/analysis/missiles?tab=simulation">Open Simulation &rarr;</a>
+          <a class="b2" href="/analysis/missiles?tab=proliferation">Proliferation &rarr;</a>
+          <a class="b2" href="/analysis/atlas">Atlas &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 OSINT // Intelligence & Resources ── -->
+  <section class="fbh-sec s04">
+    <div class="fbh-sec-head">
+      <span class="fbh-sec-num">04</span>
+      <span class="fbh-sec-label">OSINT // INTELLIGENCE &amp; RESOURCES</span>
+      <span class="fbh-rule"></span>
+    </div>
+    <div class="fbh-04">
+      <div class="fbh-04-cards">
+        <a class="fbh-col-card" href="/analysis/world-leaders"><div class="t">World Leaders</div><div class="s">5,696 records · 193 countries</div></a>
+        <a class="fbh-col-card" href="/maps"><div class="t">CIA Maps Archive</div><div class="s">300+ public-domain maps</div></a>
+        <div class="fbh-col-card">
+          <a class="t" href="/analysis/csi">Studies in Intelligence</a>
+          <div class="s">+ <a href="/analysis/csi/cold-war">Cold War</a>, <a href="/analysis/csi/counterintelligence">Counterintelligence</a>, <a href="/analysis/csi/cryptography">Cryptography</a> &amp; <a href="/analysis/csi/espionage">Espionage</a></div>
+        </div>
+        <a class="fbh-col-card" href="/analysis/flock"><div class="t">Flock Surveillance</div><div class="s">ALPR camera network · ~5,000 jurisdictions</div></a>
+      </div>
+      <a class="fbh-about" href="/about">
+        <img src="/static/img/cow_reading_book.png" alt="Factbook Archive mascot">
+        <div>
+          <div class="eyebrow">ABOUT THIS PROJECT &rarr;</div>
+          <p>Public-domain U.S. Government data, structured and preserved. Not affiliated with the CIA. Analysis follows ICD 203 standards.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <div class="fbh-bottom"></div>
+</div>
+
+<script>
+(function() {
+  /* ── Count-up stats (0 → target, 1700ms, ease-out-cubic) ── */
+  function fmt(n) { return (n || 0).toLocaleString('en-US'); }
+  function countUp() {
+    var nums = document.querySelectorAll('.fbh-stat .num[data-count]');
+    var ease = function(t) { return 1 - Math.pow(1 - t, 3); };
+    var dur = 1700, t0 = null;
+    function step(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / dur), e = ease(p);
+      nums.forEach(function(el) {
+        var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+        el.textContent = fmt(Math.round(target * e));
+      });
+      if (p < 1) requestAnimationFrame(step);
+      else nums.forEach(function(el) { el.textContent = fmt(parseInt(el.getAttribute('data-count'), 10) || 0); });
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── Theme-aware screenshots (section 02 only; spotlight stays dark) ── */
+  function lightSrc(src) {
+    if (!src || src.indexOf('/static/img/screenshots/') === -1 || src.indexOf('/screenshots/light/') !== -1) return src;
+    return src.replace('/static/img/screenshots/', '/static/img/screenshots/light/');
+  }
+  function applyShots() {
+    var light = document.documentElement.getAttribute('data-theme') === 'light';
+    document.querySelectorAll('.fbh img[data-fbh-swap]').forEach(function(img) {
+      if (!img.dataset.darkSrc) img.dataset.darkSrc = img.getAttribute('src');
+      var target = light ? lightSrc(img.dataset.darkSrc) : img.dataset.darkSrc;
+      if (img.getAttribute('src') !== target) img.setAttribute('src', target);
+      img.onerror = function() {
+        if (img.dataset.darkSrc && img.getAttribute('src') !== img.dataset.darkSrc) img.setAttribute('src', img.dataset.darkSrc);
+      };
+    });
+  }
+
+  /* ── Cursor-following glow + subtle 3D tilt (Palantir-style) ── */
+  function tilt() {
+    document.querySelectorAll('.fbh-tile, .fbh-card, .fbh-col-card').forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var r = card.getBoundingClientRect();
+        var x = e.clientX - r.left, y = e.clientY - r.top;
+        var nx = (x - r.width / 2) / (r.width / 2);
+        var ny = (y - r.height / 2) / (r.height / 2);
+        card.style.setProperty('--mx', x + 'px');
+        card.style.setProperty('--my', y + 'px');
+        card.style.transform = 'perspective(900px) rotateX(' + (-ny * 2.5).toFixed(2) +
+          'deg) rotateY(' + (nx * 3.5).toFixed(2) + 'deg) translateY(-3px)';
+      });
+      card.addEventListener('mouseleave', function() { card.style.transform = ''; });
+    });
+  }
+
+  function init() { countUp(); applyShots(); tilt(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  window.addEventListener('themechange', applyShots);
+})();
+</script>
+
+</main>
+
+<footer>
+  <img src="/static/img/cow_reading_book.png" alt="Factbook Archive mascot" class="footer-logo" id="footer-cow" style="cursor:pointer;" title="?">
+  <span>CIA World Factbook Archive</span> &mdash;
+  <a href="/">Home</a>
+  <a href="/archive">The Archive</a>
+  <a href="/analysis">Factbook Analysis</a>
+  <a href="/api">API</a>
+  <a href="/sources">Sources &amp; Methodology</a>
+  <a href="/about">About</a>
+  <a href="https://github.com/MilkMp/CIA-World-Factbooks-Archive-1990-2025" target="_blank" rel="noopener">GitHub</a>
+  <a href="/report">Report a Bug</a>
+  <br>
+  <span style="display:inline-block;">
+    Data sourced from the CIA World Factbook (public domain). This project is not affiliated with the CIA or U.S. Government.
+  </span>
+  <span class="footer-legal">
+    &mdash; Public domain data. Open source ETL (MIT). Proprietary webapp.
+  </span>
+</footer>
+
+<script>
+(function() {
+  var cow = document.getElementById('footer-cow');
+  if (!cow) return;
+  var moos = ['moo', 'moooo', 'MOO!', 'moo?', 'mooooooo', '...moo'];
+  cow.addEventListener('click', function() {
+    var rect = cow.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;' +
+      'left:' + cx + 'px;' +
+      'top:' + rect.top + 'px;' +
+      'opacity:0;transition:opacity 200ms ease;';
+
+    var d1 = document.createElement('div');
+    d1.style.cssText = 'position:absolute;bottom:-2px;left:50%;margin-left:6px;width:2px;height:2px;border-radius:50%;background:rgba(143,153,168,0.4);';
+    var d2 = document.createElement('div');
+    d2.style.cssText = 'position:absolute;bottom:2px;left:50%;margin-left:10px;width:3px;height:3px;border-radius:50%;background:rgba(143,153,168,0.35);';
+    var d3 = document.createElement('div');
+    d3.style.cssText = 'position:absolute;bottom:8px;left:50%;margin-left:12px;width:4px;height:4px;border-radius:50%;background:rgba(143,153,168,0.3);';
+
+    var bubble = document.createElement('div');
+    bubble.textContent = moos[Math.floor(Math.random() * moos.length)];
+    bubble.style.cssText =
+      'position:absolute;bottom:14px;left:50%;transform:translateX(-10%);' +
+      'background:rgba(37,42,49,0.9);border:1px solid rgba(56,62,71,0.7);' +
+      'border-radius:10px;padding:2px 8px;' +
+      'font-size:0.74rem;font-style:italic;' +
+      'color:rgba(171,179,191,0.6);white-space:nowrap;';
+
+    wrap.appendChild(d1);
+    wrap.appendChild(d2);
+    wrap.appendChild(d3);
+    wrap.appendChild(bubble);
+    document.body.appendChild(wrap);
+
+    requestAnimationFrame(function() { wrap.style.opacity = '1'; });
+    setTimeout(function() {
+      wrap.style.opacity = '0';
+      setTimeout(function() { wrap.remove(); }, 300);
+    }, 1000);
+  });
+})();
+</script>
+
+<script>
+/* Mobile hamburger nav */
+function toggleMobileNav() {
+  var nav = document.querySelector('.topbar-nav');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var button = document.querySelector('.topbar-hamburger');
+  var isOpen = nav.classList.toggle('mobile-open');
+  if (backdrop) backdrop.classList.toggle('active', isOpen);
+  if (button) {
+    button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    button.setAttribute('aria-label', isOpen ? 'Close menu' : 'Menu');
+  }
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+function closeMobileNav() {
+  var nav = document.querySelector('.topbar-nav');
+  var backdrop = document.querySelector('.mobile-nav-backdrop');
+  var button = document.querySelector('.topbar-hamburger');
+  nav.classList.remove('mobile-open');
+  if (backdrop) backdrop.classList.remove('active');
+  if (button) {
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', 'Menu');
+  }
+  document.body.style.overflow = '';
+}
+function closeAllDropdowns() {
+  document.querySelectorAll('.nav-group.expanded').forEach(function(g) {
+    g.classList.remove('expanded');
+    var trigger = g.querySelector('.nav-group-trigger');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  });
+}
+/* Click/tap nav-group-trigger to expand/collapse dropdown — works on ALL screen sizes */
+document.querySelectorAll('.nav-group-trigger').forEach(function(trigger, index) {
+  var initialGroup = trigger.closest('.nav-group');
+  var initialDropdown = initialGroup ? initialGroup.querySelector('.nav-dropdown') : null;
+  if (initialDropdown) {
+    if (!initialDropdown.id) initialDropdown.id = 'topbar-dropdown-' + index;
+    trigger.setAttribute('aria-controls', initialDropdown.id);
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+  trigger.addEventListener('click', function(e) {
+    var group = trigger.closest('.nav-group');
+    var dropdown = group.querySelector('.nav-dropdown');
+    if (!dropdown) return; // No dropdown (e.g. Home link) — let default navigation happen
+    e.preventDefault();
+    e.stopPropagation();
+    var wasOpen = group.classList.contains('expanded');
+    closeAllDropdowns();
+    if (!wasOpen) {
+      group.classList.add('expanded');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+/* Click outside any nav-group closes dropdowns */
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nav-group')) {
+    closeAllDropdowns();
+  }
+});
+/* On desktop, close dropdown when mouse leaves the nav-group (restores hover-out behavior) */
+document.querySelectorAll('.nav-group').forEach(function(group) {
+  group.addEventListener('mouseleave', function() {
+    if (window.innerWidth > 900) {
+      group.classList.remove('expanded');
+      var trigger = group.querySelector('.nav-group-trigger');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  var button = document.querySelector('.topbar-hamburger');
+  var wasMobileOpen = document.querySelector('.topbar-nav').classList.contains('mobile-open');
+  closeAllDropdowns();
+  closeMobileNav();
+  if (wasMobileOpen && button) button.focus();
+});
+/* Navigate from dropdown links — programmatic nav prevents mobile slide-away from cancelling click */
+document.querySelectorAll('.nav-dropdown a').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    var href = link.getAttribute('href');
+    if (href) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeAllDropdowns();
+      if (window.innerWidth <= 900) closeMobileNav();
+      window.location.href = href;
+    }
+  });
+});
+</script>
+<script src="/static/js/archive-research.js?v=8"></script>
+<script>
+if (window.WFAVisualPalette) window.WFAVisualPalette.installRenderers();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var size = document.documentElement.getAttribute('data-text-size') || 'large';
+  if (typeof setTextSize === 'function') setTextSize(size);
+  var colorVision = document.documentElement.getAttribute('data-color-vision') || 'default';
+  if (typeof setColorVision === 'function') setColorVision(colorVision);
+  document.querySelectorAll('[data-color-vision-option]').forEach(function(button){
+    button.addEventListener('click', function(){
+      var details = button.closest('details');
+      if (details) details.open = false;
+    });
+  });
+});
+</script>
+
+<!-- Global Search Modal (Ctrl+K) -->
+<script>
+/* Pure vanilla JS for search modal open/close — no Alpine dependency */
+function openSearchModal() {
+  var bd = document.querySelector('.gs-backdrop');
+  var md = document.querySelector('.gs-modal');
+  if (bd) bd.classList.add('gs-open');
+  if (md) md.classList.add('gs-open');
+  document.body.style.overflow = 'hidden';
+  var input = md && md.querySelector('.gs-input');
+  if (input) input.focus();
+  window.dispatchEvent(new CustomEvent('gs-opened'));
+}
+function closeSearchModal() {
+  var bd = document.querySelector('.gs-backdrop');
+  var md = document.querySelector('.gs-modal');
+  if (bd) bd.classList.remove('gs-open');
+  if (md) md.classList.remove('gs-open');
+  document.body.style.overflow = '';
+  window.dispatchEvent(new CustomEvent('gs-closed'));
+}
+function clearGlobalSearchHighlight() {
+  document.querySelectorAll('.gs-highlight').forEach(function(el) {
+    el.classList.remove('gs-highlight');
+  });
+  document.querySelectorAll('.gs-highlight-banner').forEach(function(el) {
+    if (el.parentNode) el.parentNode.removeChild(el);
+  });
+  try {
+    var url = new URL(window.location);
+    if (url.searchParams.has('highlight')) {
+      url.searchParams.delete('highlight');
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+  } catch (e) {}
+}
+window.clearGlobalSearchHighlight = clearGlobalSearchHighlight;
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeSearchModal();
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    var md = document.querySelector('.gs-modal');
+    if (md && md.classList.contains('gs-open')) closeSearchModal();
+    else openSearchModal();
+  }
+});
+</script>
+<script>
+/* Global search controller — plain JS, CSP-safe.
+   Formerly an Alpine.js component: the site CSP allows only 'wasm-unsafe-eval',
+   and Alpine's standard build compiles every x-* expression with new Function(),
+   so all bindings failed under the production CSP. This version renders the
+   results list directly and needs no expression evaluation. */
+(function() {
+  var PAGES = [
+    /* The Archive */
+    { name: 'The Archive', url: '/archive', kw: 'library countries entities list browse years editions' },
+    
+    { name: 'Media Archive', url: '/archive/media', kw: 'media photos photographs images maps flags country territory factbook editions collection gallery' },
+    
+    { name: 'Archive (Table)', url: '/archive?view=table', kw: 'dictionary lookup codes iso fips table' },
+    { name: 'Archive (Timeline)', url: '/archive?view=timeline', kw: 'browse years editions timeline' },
+    { name: 'Search Fields', url: '/search', kw: 'search find query text full' },
+    { name: 'Text Diff', url: '/analysis/diff', kw: 'diff compare text difference' },
+    { name: 'Data Export', url: '/export', kw: 'download csv json export pdf report print' },
+    { name: 'Factbook Quiz', url: '/analysis/quiz', kw: 'quiz game trivia test' },
+    /* Maps */
+    { name: 'Intelligence Atlas', url: '/analysis/atlas', kw: 'atlas globe map terrain 3d satellite military disputes infrastructure intelligence mining nuclear' },
+    { name: '3D Missile Globe', url: '/analysis/missiles-3d', kw: '3d missile globe simulator nuclear sites ranges intercept satellite command palette' },
+    { name: 'Nuclear & Missile Threats', url: '/analysis/missiles', kw: 'missile nuclear threat defense launch systems arsenals facilities' },
+    { name: 'Regional Dashboard', url: '/analysis/regional', kw: 'map region geographic dashboard cocom' },
+    { name: 'Timeline Map', url: '/analysis/timeline', kw: 'animation years choropleth timeline' },
+    { name: 'Map Compare', url: '/analysis/map-compare', kw: 'side maps compare dual' },
+    /* Analysis — Indicators */
+    { name: 'Global Rankings', url: '/analysis/rankings', kw: 'rank sort indicator top bottom' },
+    { name: 'Global Trends', url: '/analysis/trends', kw: 'trend chart time series line' },
+    { name: 'Compare Countries', url: '/analysis/compare', kw: 'compare versus country' },
+    { name: 'Change Detection', url: '/analysis/changes', kw: 'change detection year difference' },
+    { name: 'Political Change', url: '/analysis/political', kw: 'political regime government democracy communist change timeline' },
+    /* Analysis — Sectors */
+    { name: 'Resources & Economy', url: '/analysis/resources', kw: 'natural resources economy trade oil gas minerals exports imports gdp debt inflation commodity' },
+    { name: 'People & Society', url: '/analysis/people', kw: 'demographics population fertility mortality life expectancy migration urbanization age structure sex ratio dependency pyramid development inequality health education' },
+    { name: 'Economy & Trade', url: '/analysis/economy', kw: 'trade network graph organization resources economy communications internet telecom' },
+    { name: 'Dissolved States', url: '/analysis/dissolved', kw: 'historical defunct dissolved ussr yugoslavia' },
+    { name: 'Advanced Analytics', url: '/analysis/explorer', kw: 'advanced analytics scatter explorer' },
+    /* Analysis — Data Tools */
+    { name: 'Factbook Analysis', url: '/analysis', kw: 'analysis overview dashboard factbook visualization' },
+    { name: 'Query Builder', url: '/analysis/query-builder', kw: 'custom query sql builder' },
+    { name: 'Dashboard Builder', url: '/analysis/dashboard-builder', kw: 'dashboard builder custom drag drop widget visualization analytics kpi chart' },
+    { name: 'Field Explorer', url: '/analysis/fields', kw: 'field data coverage explorer' },
+    { name: 'Structured Field Data', url: '/analysis/structured-data', kw: 'structured parsed fields database schema' },
+    { name: 'API Documentation', url: '/api', kw: 'api developer endpoints rest documentation' },
+    /* Intelligence Studies & OSINT */
+    { name: 'Intelligence Studies & OSINT', url: '/cia-resources', kw: 'intelligence studies osint open source cia resources overview' },
+    { name: 'Foreign Leaders', url: '/analysis/world-leaders', kw: 'foreign world leaders government cabinet minister president prime head state defense security intelligence chiefs of state' },
+    { name: 'Browse Leaders', url: '/analysis/world-leaders/browse', kw: 'browse foreign leaders chiefs state cabinet archive country lookup reference' },
+    { name: 'CIA Maps', url: '/maps', kw: 'cia reference maps countries regions' },
+    { name: 'CSI Library', url: '/analysis/csi', kw: 'csi studies intelligence journal articles search library' },
+    { name: 'Cold War', url: '/analysis/csi/cold-war', kw: 'cold war dossier cuba berlin korea 1983 able archer espionage covert flashpoints soviet' },
+    { name: 'Great Power Rivalry', url: '/analysis/csi/great-power', kw: 'csi great power rivalry china russia iran north korea near peer hybrid warfare' },
+    { name: 'CSI Browse', url: '/analysis/csi/browse', kw: 'csi browse articles issues volumes year' },
+    { name: 'CSI Counterintelligence', url: '/analysis/csi/counterintelligence', kw: 'csi counterintelligence moles traitors spies cia ci doctrine threats' },
+    { name: 'CSI Cryptography', url: '/analysis/csi/cryptography', kw: 'csi cryptography codebreaking kryptos cipher enigma venona' },
+    { name: 'CSI Terrorism', url: '/analysis/csi/terrorism', kw: 'csi terrorism war on terror 9/11 al-qaeda bin laden taliban afghanistan iraq jihadism counterterrorism' },
+    { name: 'Biological Weapons & Intelligence', url: '/analysis/csi/biological-weapons', kw: 'csi biological bioweapons history judgment analysis bookshelf reviews' },
+    { name: 'CSI Library — Corpus analysis', url: '/analysis/csi?view=analysis', kw: 'csi studies analytics dashboard trends entities' },
+    /* Reference */
+    { name: 'About', url: '/about', kw: 'about project information credits' },
+    { name: 'Sources & Methodology', url: '/sources', kw: 'sources methodology data collection parsing' },
+    { name: 'Report a Bug', url: '/report', kw: 'report bug feedback issue' },
+  ];
+
+  var ICONS = {
+    country: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M2.5 8h11M8 2.5c-2 2.44-2 8.56 0 11M8 2.5c2 2.44 2 8.56 0 11"/></svg>',
+    page: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 2h5l3.5 4v8H4.5V2z"/><path d="M9 2v4h4"/><path d="M6.5 8h5M6.5 10.5h5"/></svg>',
+    site: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 3.5h11v9h-11z"/><path d="M4.5 6h7M4.5 8h5M4.5 10h6"/></svg>',
+    field: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v8c0 1.1 2.24 2 5 2s5-.9 5-2V4"/><path d="M3 8c0 1.1 2.24 2 5 2s5-.9 5-2"/></svg>'
+  };
+
+  var S = {
+    query: '',
+    activeIdx: 0,
+    countries: [],
+    countryResults: [],
+    pageResults: [],
+    siteResults: [],
+    fieldResults: [],
+    countryLimit: 5,
+    pageLimit: 4,
+    fieldPage: 1,
+    fieldTotal: 0,
+    fieldCapped: false,
+    fieldLoading: false,
+    fieldTimedOut: false,
+    siteLoading: false
+  };
+  var _fieldVer = 0, _fieldTimeout = null;
+  var _siteVer = 0, _siteTimeout = null;
+  var _input = null, _results = null;
+
+  function escapeHtml(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function highlightMatch(value) {
+    var text = String(value == null ? '' : value);
+    var q = S.query.trim();
+    if (!q) return escapeHtml(text);
+    var escapedQuery = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    try {
+      return escapeHtml(text).replace(new RegExp('(' + escapedQuery + ')', 'ig'), '<mark class="gs-match">$1</mark>');
+    } catch (e) {
+      return escapeHtml(text);
+    }
+  }
+
+  function visibleCountries() { return S.countryResults.slice(0, S.countryLimit); }
+  function visiblePages() { return S.pageResults.slice(0, S.pageLimit); }
+
+  function flatItemHtml(r, idx, icon) {
+    return '<a href="' + escapeHtml(r.url) + '" class="gs-item" data-idx="' + idx + '">' + icon +
+           '<span>' + highlightMatch(r.name) + '</span>' +
+           (r.meta ? '<span class="gs-meta">' + highlightMatch(r.meta) + '</span>' : '') +
+           '</a>';
+  }
+
+  function richItemHtml(r, idx, icon) {
+    return '<a href="' + escapeHtml(r.url) + '" class="gs-item gs-field-item" data-idx="' + idx + '">' + icon +
+           '<div class="gs-item-body"><div class="gs-item-main">' +
+           '<span>' + highlightMatch(r.name) + '</span>' +
+           '<span class="gs-meta">' + highlightMatch(r.meta) + '</span>' +
+           '</div>' +
+           (r.preview ? '<div class="gs-preview">' + highlightMatch(r.preview) + '</div>' : '') +
+           '</div></a>';
+  }
+
+  function render() {
+    if (!_results) return;
+    var q = S.query.trim();
+    if (!q) { _results.style.display = 'none'; _results.innerHTML = ''; return; }
+    _results.style.display = '';
+
+    var html = '';
+    var idx = 0;
+
+    if (S.countryResults.length) {
+      html += '<div class="gs-group"><div class="gs-group-label">Countries';
+      if (S.countryResults.length > S.countryLimit) html += ' <span>(' + S.countryResults.length + ')</span>';
+      html += '</div>';
+      visibleCountries().forEach(function(r) { html += flatItemHtml(r, idx++, ICONS.country); });
+      if (S.countryResults.length > S.countryLimit) {
+        html += '<button class="gs-show-more" data-action="all-countries">Show all ' +
+                (S.countryResults.length - S.countryLimit) + ' more</button>';
+      }
+      html += '</div>';
+    }
+
+    if (S.pageResults.length) {
+      html += '<div class="gs-group"><div class="gs-group-label">Pages</div>';
+      visiblePages().forEach(function(r) { html += flatItemHtml(r, idx++, ICONS.page); });
+      if (S.pageResults.length > S.pageLimit) {
+        html += '<button class="gs-show-more" data-action="all-pages">Show all ' +
+                (S.pageResults.length - S.pageLimit) + ' more</button>';
+      }
+      html += '</div>';
+    }
+
+    if (S.siteResults.length || S.siteLoading) {
+      html += '<div class="gs-group"><div class="gs-group-label">Site Results</div>';
+      S.siteResults.forEach(function(r) { html += richItemHtml(r, idx++, ICONS.site); });
+      if (S.siteLoading) html += '<div class="gs-empty" style="padding:12px;">Searching site...</div>';
+      html += '</div>';
+    }
+
+    if (S.fieldResults.length || S.fieldLoading || S.fieldTimedOut) {
+      html += '<div class="gs-group"><div class="gs-group-label">Data Fields';
+      if (S.fieldTotal > 0) html += ' <span>(' + S.fieldTotal + (S.fieldCapped ? '+' : '') + ')</span>';
+      html += '</div>';
+      S.fieldResults.forEach(function(r) { html += richItemHtml(r, idx++, ICONS.field); });
+      if (S.fieldTotal > S.fieldResults.length && !S.fieldLoading && !S.fieldTimedOut) {
+        html += '<button class="gs-show-more" data-action="more-fields">Load more (' +
+                (S.fieldTotal - S.fieldResults.length) + (S.fieldCapped ? '+' : '') + ' remaining)</button>';
+      }
+      if (S.fieldLoading) html += '<div class="gs-empty" style="padding:12px;">Loading...</div>';
+      else if (S.fieldTimedOut && !S.fieldResults.length) html += '<div class="gs-empty" style="padding:12px;">Too many matches to scan — add another word to narrow your search.</div>';
+      html += '</div>';
+    }
+
+    if (!html && !S.fieldLoading && !S.siteLoading && q.length >= 2) {
+      html = '<div class="gs-empty">No results found</div>';
+    }
+
+    _results.innerHTML = html;
+    applyActive(false);
+  }
+
+  function applyActive(scroll) {
+    if (!_results) return;
+    var items = _results.querySelectorAll('.gs-item');
+    for (var i = 0; i < items.length; i++) {
+      items[i].classList.toggle('gs-active', i === S.activeIdx);
+    }
+    if (scroll) {
+      var el = _results.querySelector('.gs-active');
+      if (el) el.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  function resultCount() {
+    return visibleCountries().length + visiblePages().length +
+           S.siteResults.length + S.fieldResults.length;
+  }
+
+  function search() {
+    var q = S.query.toLowerCase().trim();
+    if (!q) {
+      S.countryResults = [];
+      S.pageResults = [];
+      S.siteResults = [];
+      S.fieldResults = [];
+      S.activeIdx = 0;
+      S.countryLimit = 5;
+      S.pageLimit = 4;
+      S.fieldPage = 1;
+      S.fieldTotal = 0;
+      S.fieldCapped = false;
+      S.siteLoading = false;
+      S.fieldLoading = false;
+      S.fieldTimedOut = false;
+      clearTimeout(_fieldTimeout);
+      clearTimeout(_siteTimeout);
+      if (typeof clearGlobalSearchHighlight === 'function') clearGlobalSearchHighlight();
+      render();
+      return;
+    }
+
+    /* Reset limits on new search */
+    S.countryLimit = 5;
+    S.pageLimit = 4;
+    S.fieldPage = 1;
+    S.fieldTotal = 0;
+    S.fieldCapped = false;
+    S.fieldTimedOut = false;
+
+    /* Countries — instant client-side (all matches, display limited) */
+    S.countryResults = S.countries
+      .filter(function(c) {
+        var name = c.CanonicalName.toLowerCase();
+        var iso2 = (c.ISOAlpha2 || '').toLowerCase();
+        var iso3 = (c.ISOAlpha3 || '').toLowerCase();
+        return name.indexOf(q) !== -1 || iso2 === q || iso3 === q;
+      })
+      .map(function(c) {
+        return {
+          type: 'country',
+          name: c.CanonicalName,
+          meta: c.EntityType,
+          url: '/archive/' + c.LastYear + '/' + (c.LinkCode || c.ISOAlpha2 || c.CanonicalCode)
+        };
+      });
+
+    /* Pages — instant static (all matches, display limited) */
+    S.pageResults = PAGES
+      .filter(function(p) {
+        return p.name.toLowerCase().indexOf(q) !== -1 || p.kw.indexOf(q) !== -1;
+      })
+      .map(function(p) {
+        return { type: 'page', name: p.name, meta: '', url: p.url };
+      });
+
+    /* Fields — debounced API call (3+ chars) */
+    clearTimeout(_fieldTimeout);
+    clearTimeout(_siteTimeout);
+    S.siteResults = [];
+    if (q.length >= 2) {
+      _siteTimeout = setTimeout(function() { searchSite(q); }, 180);
+    }
+    if (q.length >= 3) {
+      S.fieldResults = [];
+      _fieldTimeout = setTimeout(function() { searchFields(q, 1); }, 300);
+    } else {
+      S.fieldResults = [];
+    }
+
+    S.activeIdx = 0;
+    render();
+  }
+
+  function searchSite(q) {
+    var ver = ++_siteVer;
+    S.siteLoading = true;
+    render();
+    /* Abort if the request stalls so the spinner never hangs. */
+    var ctrl = new AbortController();
+    var to = setTimeout(function() { ctrl.abort(); }, 9000);
+    fetch('/api/site-search?q=' + encodeURIComponent(q), { signal: ctrl.signal })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        clearTimeout(to);
+        if (_siteVer !== ver) return;
+        S.siteResults = data.results || [];
+        S.siteLoading = false;
+        render();
+      })
+      .catch(function() {
+        clearTimeout(to);
+        if (_siteVer === ver) {
+          S.siteResults = [];
+          S.siteLoading = false;
+          render();
+        }
+      });
+  }
+
+  function searchFields(q, page) {
+    var ver = ++_fieldVer;
+    S.fieldLoading = true;
+    S.fieldTimedOut = false;
+    render();
+    /* Abort if the request stalls so the spinner never hangs. */
+    var ctrl = new AbortController();
+    var to = setTimeout(function() { ctrl.abort(); }, 10000);
+    fetch('/api/search?q=' + encodeURIComponent(q) + '&page=' + page, { signal: ctrl.signal })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        clearTimeout(to);
+        if (_fieldVer !== ver) return;
+        if (data.timeout) {
+          /* Server gave up (term too common) — show guidance, not a spinner. */
+          if (page === 1) { S.fieldResults = []; S.fieldTotal = 0; S.fieldCapped = false; }
+          S.fieldLoading = false;
+          S.fieldTimedOut = true;
+          render();
+          return;
+        }
+        var mapped = (data.results || []).map(function(r) {
+          return {
+            type: 'field',
+            name: r.FieldName,
+            meta: r.Name + ' (' + r.Year + ')',
+            preview: (r.ContentPreview || '').substring(0, 100),
+            url: '/archive/' + r.Year + '/' + (r.LinkCode || r.ISOAlpha2 || r.Code) + '?highlight=' + encodeURIComponent(r.FieldName)
+          };
+        });
+        if (page === 1) {
+          S.fieldResults = mapped;
+        } else {
+          S.fieldResults = S.fieldResults.concat(mapped);
+        }
+        S.fieldTotal = data.total || 0;
+        S.fieldCapped = !!data.total_capped;
+        S.fieldPage = page;
+        S.fieldLoading = false;
+        render();
+      })
+      .catch(function() {
+        clearTimeout(to);
+        if (_fieldVer === ver) {
+          S.fieldLoading = false;
+          if (page === 1) { S.fieldResults = []; S.fieldTimedOut = true; }
+          render();
+        }
+      });
+  }
+
+  function loadMoreFields() {
+    if (S.fieldLoading) return;
+    var q = S.query.toLowerCase().trim();
+    if (q.length >= 3) searchFields(q, S.fieldPage + 1);
+  }
+
+  function moveDown() {
+    if (S.activeIdx < resultCount() - 1) S.activeIdx++;
+    applyActive(true);
+  }
+
+  function moveUp() {
+    if (S.activeIdx > 0) S.activeIdx--;
+    applyActive(true);
+  }
+
+  function go() {
+    var items = _results ? _results.querySelectorAll('.gs-item') : [];
+    var el = items[S.activeIdx];
+    if (el && el.href) window.location.href = el.href;
+  }
+
+  function reset() {
+    S.query = '';
+    S.activeIdx = 0;
+    S.countryResults = [];
+    S.pageResults = [];
+    S.siteResults = [];
+    S.fieldResults = [];
+    S.countryLimit = 5;
+    S.pageLimit = 4;
+    S.fieldPage = 1;
+    S.fieldTotal = 0;
+    S.fieldCapped = false;
+    S.siteLoading = false;
+    S.fieldLoading = false;
+    S.fieldTimedOut = false;
+    if (_input) _input.value = '';
+    render();
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    _input = document.querySelector('.gs-modal .gs-input');
+    _results = document.getElementById('gs-results');
+    if (!_input || !_results) return;
+
+    _input.addEventListener('input', function() {
+      S.query = _input.value;
+      search();
+    });
+    _input.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); moveDown(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); moveUp(); }
+      else if (e.key === 'Enter') { e.preventDefault(); go(); }
+    });
+
+    _results.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      e.preventDefault();
+      var action = btn.getAttribute('data-action');
+      if (action === 'all-countries') { S.countryLimit = S.countryResults.length; S.activeIdx = 0; render(); }
+      else if (action === 'all-pages') { S.pageLimit = S.pageResults.length; S.activeIdx = 0; render(); }
+      else if (action === 'more-fields') loadMoreFields();
+    });
+    _results.addEventListener('mouseover', function(e) {
+      var item = e.target.closest('.gs-item');
+      if (!item) return;
+      var i = parseInt(item.getAttribute('data-idx'), 10);
+      if (!isNaN(i) && i !== S.activeIdx) { S.activeIdx = i; applyActive(false); }
+    });
+
+    window.addEventListener('gs-opened', function() {
+      reset();
+      if (!S.countries.length) {
+        fetch('/api/countries')
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            S.countries = d;
+            if (S.query.trim()) search();
+          })
+          .catch(function() { S.countries = []; });
+      }
+    });
+    window.addEventListener('gs-closed', reset);
+  });
+})();
+</script>
+<div>
+  <!-- Backdrop -->
+  <div class="gs-backdrop" onclick="closeSearchModal()"></div>
+  <!-- Modal -->
+  <div class="gs-modal">
+    <div class="gs-input-wrap">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+      <input class="gs-input" type="text"
+             aria-label="Search countries, pages, or data"
+             placeholder="Search countries, pages, or data...">
+      <button type="button" class="gs-close" onclick="closeSearchModal()">&times;</button>
+    </div>
+    <div class="gs-results" id="gs-results" style="display:none"></div>
+    <div class="gs-hint">
+      <span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+      <span><kbd>&#9166;</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var ZONES = [
+    {id:'wc-dc', tz:'America/New_York'},
+    {id:'wc-lon',tz:'Europe/London'},
+    {id:'wc-mow',tz:'Europe/Moscow'},
+    {id:'wc-tlv',tz:'Asia/Jerusalem'},
+    {id:'wc-del',tz:'Asia/Kolkata'},
+    {id:'wc-bei',tz:'Asia/Shanghai'},
+    {id:'wc-tyo',tz:'Asia/Tokyo'}
+  ];
+  function tick(){
+    var now=new Date();
+    ZONES.forEach(function(z){
+      var el=document.getElementById(z.id);
+      if(!el)return;
+      var t=now.toLocaleTimeString('en-US',{timeZone:z.tz,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+      el.textContent=t;
+    });
+  }
+  tick();
+  setInterval(tick,1000);
+})();
+</script>
+<button id="back-to-top" aria-label="Back to top" style="
+  position:fixed;bottom:24px;right:24px;z-index:100;
+  width:40px;height:40px;border-radius:50%;border:1px solid var(--border-strong,var(--border));
+  background:var(--bg-surface,var(--bg-surface));color:var(--text-muted,var(--text-muted));
+  cursor:pointer;display:none;align-items:center;justify-content:center;
+  font-size:1.1rem;box-shadow:0 2px 8px rgba(0,0,0,0.3);transition:opacity 200ms,background 200ms;
+" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+<script>
+(function(){
+  var btn=document.getElementById('back-to-top');
+  if(!btn)return;
+  window.addEventListener('scroll',function(){
+    btn.style.display=window.scrollY>400?'flex':'none';
+  },{passive:true});
+})();
+</script>
+<style>
+@media print {
+  .top-banner, .topbar, .topbar-hamburger, .mobile-nav-backdrop,
+  .gs-backdrop, .gs-modal, #back-to-top, #page-loader, .footer-logo { display: none !important; }
+  body { background: #fff; color: #000; }
+  main { padding: 0; }
+  footer { border-top: 1px solid #ccc; padding: 8px 0; font-size: 0.91rem; color: #333; }
+  a { color: #000; text-decoration: underline; }
+  .skip-to-content { display: none !important; }
+}
+</style>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"cafb6140eef84b9eba7884a2de54e163","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
 </html>
